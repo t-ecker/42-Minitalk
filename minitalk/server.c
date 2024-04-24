@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:38:43 by tecker            #+#    #+#             */
-/*   Updated: 2024/04/24 15:01:45 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:31:17 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	converter(int signum)
 	i++;
 	if (i == 8)
 	{
+		if (byte == 0)
+			write(1, "\n", 1);
 		write(1, &byte, 1);
 		byte = 0;
 		i = 0;

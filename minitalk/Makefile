@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+         #
+#    By: tecker <tecker@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/23 19:00:52 by tomecker          #+#    #+#              #
-#    Updated: 2024/04/24 15:40:24 by tomecker         ###   ########.fr        #
+#    Updated: 2024/04/24 17:36:13 by tecker           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,4 +33,4 @@ clean:
 	
 fclean:	clean
 
-re: fclean all
+re: fclean all bonus

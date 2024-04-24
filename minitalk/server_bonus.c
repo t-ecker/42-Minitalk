@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
-/*   Updated: 2024/04/24 16:11:59 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:34:01 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_putnbr(int n)
 	write(1, &c, 1);
 }
 
-void converter(int signum, siginfo_t *info, void *context)
+void	converter(int signum, siginfo_t *info, void *context)
 {
 	static int	byte = 0;
 	static int	i = 0;
@@ -34,21 +34,21 @@ void converter(int signum, siginfo_t *info, void *context)
 
 	(void)context;
 	if (signum == SIGUSR1)
-	{
 		n = 1;
-		kill(info->si_pid, SIGUSR1);
-	}
 	else
-	{
 		n = 0;
-		kill(info->si_pid, SIGUSR2);
-	}
 	byte <<= 1;
 	byte |= n;
 	i++;
 	if (i == 8)
 	{
-		write(1, &byte, 1);
+		if (byte == 0)
+		{
+			write(1, "\n", 1);
+			kill(info->si_pid, SIGUSR1);
+		}
+		else
+			write(1, &byte, 1);
 		byte = 0;
 		i = 0;
 	}
