@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 11:09:34 by tecker            #+#    #+#             */
-/*   Updated: 2024/04/24 15:58:59 by tomecker         ###   ########.fr       */
+/*   Created: 2024/04/24 15:29:02 by tomecker          #+#    #+#             */
+/*   Updated: 2024/04/24 15:31:49 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,20 @@ void	converter(char *str, int pid)
 		}
 		j++;
 	}
-	i = 7;
-    while (i >= 0)
-	{
-        kill(pid, SIGUSR2);
-        i--;
-        usleep(300);
-    }
 }
+void handler_function (int sigum)
+{
+	if (sigum == SIGUSR1)
+		write(1, "Received bit 1\n", 15);
+	else
+		write(1, "Received bit 0\n", 15);
 
+}
 int	main(int argc, char *argv[])
 {
 	int	pid;
-
+	signal(SIGUSR1, handler_function);
+	signal(SIGUSR2, handler_function);
 	if (argc != 3)
 		return (write(1, "Error\n", 6), 1);
 	pid = ft_atoi(argv[1]);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 11:38:43 by tecker            #+#    #+#             */
-/*   Updated: 2024/04/24 15:01:45 by tomecker         ###   ########.fr       */
+/*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
+/*   Updated: 2024/04/24 16:11:59 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,23 @@ void	ft_putnbr(int n)
 	write(1, &c, 1);
 }
 
-void	converter(int signum)
+void converter(int signum, siginfo_t *info, void *context)
 {
 	static int	byte = 0;
 	static int	i = 0;
 	int			n;
 
+	(void)context;
 	if (signum == SIGUSR1)
+	{
 		n = 1;
+		kill(info->si_pid, SIGUSR1);
+	}
 	else
+	{
 		n = 0;
+		kill(info->si_pid, SIGUSR2);
+	}
 	byte <<= 1;
 	byte |= n;
 	i++;
@@ -56,11 +63,11 @@ int	main(void)
 	write(1, "The pid is: ", 12);
 	ft_putnbr(pid);
 	write(1, "\n", 1);
-	b.sa_handler = converter;
+	b.sa_sigaction = &converter;
 	sigemptyset(&b.sa_mask);
-	b.sa_flags = 0;
-	sigaction(SIGUSR1, &b, 0);
-	sigaction(SIGUSR2, &b, 0);
+	b.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &b, NULL);
+	sigaction(SIGUSR2, &b, NULL);
 	while (1)
 		pause();
 }
