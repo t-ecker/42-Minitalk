@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 11:09:34 by tecker            #+#    #+#             */
-/*   Updated: 2024/04/24 17:33:48 by tecker           ###   ########.fr       */
+/*   Created: 2024/04/24 15:29:02 by tomecker          #+#    #+#             */
+/*   Updated: 2024/04/24 18:17:15 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <signal.h>
-#include <stdio.h>
 
 int	ft_atoi(char *str)
 {
@@ -54,17 +53,24 @@ void	converter(char c, int pid)
 		else
 			kill (pid, SIGUSR2);
 		i--;
-		usleep(300);
+		usleep(420);
 	}
+}
+
+void	handler_function(int sigum)
+{
+	if (sigum == SIGUSR1)
+		write(1, "Message Received\n", 17);
 }
 
 int	main(int argc, char *argv[])
 {
-	int	pid;
 	int	i;
+	int	pid;
 
 	i = 0;
-	if (argc != 3)
+	signal(SIGUSR1, handler_function);
+	if (argc != 3 || ft_strlen(argv[1]) != 5)
 		return (write(1, "Error\n", 6), 1);
 	pid = ft_atoi(argv[1]);
 	while (argv[2][i])

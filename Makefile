@@ -6,7 +6,7 @@
 #    By: tecker <tecker@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/23 19:00:52 by tomecker          #+#    #+#              #
-#    Updated: 2024/04/24 17:36:13 by tecker           ###   ########.fr        #
+#    Updated: 2024/04/24 18:28:36 by tecker           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SERVER_BONUS = server_bonus
 CFLAGS = -Wall -Werror -Wextra
 
 all:
-	@cc $(CFLAGS) server.c -o $(SERVER)
+	@cc $(CFLAGS) server.c -o server
 	@cc $(CFLAGS) client.c -o $(CLIENT)
 	@echo "created server and client"
 	
@@ -34,3 +34,5 @@ clean:
 fclean:	clean
 
 re: fclean all bonus
+
+.PHONY: all bonus clean fclean re
