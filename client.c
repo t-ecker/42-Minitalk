@@ -3,67 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:09:34 by tecker            #+#    #+#             */
-/*   Updated: 2024/04/24 18:06:01 by tecker           ###   ########.fr       */
+/*   Updated: 2024/04/25 22:01:05 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <signal.h>
+#include "minitalk.h"
 
-int	ft_atoi(char *str)
+void	handler_function(int sig)
 {
-	int	i;
-	int	number;
-
-	number = 0;
-	i = 0;
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		number *= 10;
-		number += (str[i] - 48);
-		i++;
-	}
-	return (number);
-}
-
-int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
+	if (sig == SIGUSR2)
+		usleep(20);
 }
 
 void	converter(char c, int pid)
 {
-	int	i;
-	int	res;
+	int					i;
+	int					res;
+	struct sigaction	sa;
 
+	sa.sa_handler = handler_function;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGUSR2, &sa, NULL);
 	i = 7;
 	while (i >= 0)
 	{
 		res = (c >> i) & 1;
 		if (res == 1)
-			kill (pid, SIGUSR1);
+			kill(pid, SIGUSR1);
 		else
-			kill (pid, SIGUSR2);
+			kill(pid, SIGUSR2);
+		pause();
 		i--;
-		usleep(300);
 	}
 }
 
 int	main(int argc, char *argv[])
 {
-	int	pid;
 	int	i;
+	int	pid;
 
 	i = 0;
-	if (argc != 3 || ft_strlen(argv[1]) != 5)
+	if (argc != 3 || (ft_strlen(argv[1]) > 5 && ft_strlen(argv[1]) < 4))
 		return (write(1, "Error\n", 6), 1);
 	pid = ft_atoi(argv[1]);
 	while (argv[2][i])
