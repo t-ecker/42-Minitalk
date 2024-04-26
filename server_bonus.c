@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
-/*   Updated: 2024/04/25 21:37:02 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:46:47 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+#include <stdio.h>
 
 int	g_buffer_size = 512;
 
 void	my_realloc(char **ptr)
 {
 	char	*new_ptr;
-
+	// printf("\nb: %i\n\n", g_buffer_size);	
 	if (*ptr == NULL)
 	{
 		*ptr = malloc((g_buffer_size) * sizeof(char));
@@ -53,6 +54,7 @@ void	char_process(int *byte, int *char_count, char **str, siginfo_t **info)
 		free(*str);
 		*str = NULL;
 		g_buffer_size = 512;
+		// printf("\nc: %i\n\n", *char_count);
 		*char_count = 0;
 	}
 	else
@@ -71,7 +73,6 @@ void	converter(int signum, siginfo_t *info, void *context)
 	static char	*str = NULL;
 	int			n;
 
-	kill(info->si_pid, SIGUSR2);
 	(void)context;
 	if (signum == SIGUSR1)
 		n = 1;
@@ -90,6 +91,7 @@ void	converter(int signum, siginfo_t *info, void *context)
 		char_process(&byte, &char_count, &str, &info);
 		i = 0;
 	}
+	kill(info->si_pid, SIGUSR2);
 }
 
 int	main(void)

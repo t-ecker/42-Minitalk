@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:29:02 by tomecker          #+#    #+#             */
-/*   Updated: 2024/04/25 22:00:53 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:55:23 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+void	handler_function2(int sig)
+{
+	if (sig == SIGUSR2)
+		usleep(20);
+}
 
 void	handler_function(int sig)
 {
@@ -18,10 +24,6 @@ void	handler_function(int sig)
 	{
 		write(1, "\nMessage sent successfully\n\n", 28);
 		exit(1);
-	}
-	else if (sig == SIGUSR2)
-	{
-		usleep(20);
 	}
 }
 
@@ -31,7 +33,7 @@ void	converter(char c, int pid)
 	int					res;
 	struct sigaction	sa;
 
-	sa.sa_handler = handler_function;
+	sa.sa_handler = handler_function2;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGUSR2, &sa, NULL);
@@ -43,9 +45,9 @@ void	converter(char c, int pid)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		pause();
 		i--;
 	}
+		pause();
 }
 
 int	main(int argc, char *argv[])
