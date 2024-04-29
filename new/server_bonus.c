@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
-/*   Updated: 2024/04/26 18:06:54 by tecker           ###   ########.fr       */
+/*   Updated: 2024/04/29 18:14:13 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	char_process(int *byte, int *char_count, char **str, siginfo_t **info)
 {
 	if (*char_count == 0)
 	{
-		printf("kk%ikk\n", *byte);
+		// ft_putnbr_fd(*byte, 1);
+		// write(1, "\n", 1);
 		*str = malloc(*byte + 1);
 		if (*str == NULL)
 		{
@@ -51,18 +52,17 @@ void	converter(int signum, siginfo_t *info, void *context)
 	static int	char_count = 0;
 	static char	*str = NULL;
 	int			n;
-
 	(void)context;
 	if (char_count == 0)
 	{
 		if (signum == SIGUSR1)
-		n = 1;
+			n = 1;
 		else
 			n = 0;
 		byte <<= 1;
 		byte |= n;
 		i++;
-		if (i == 32)
+		if (i > 31)
 		{
 			char_process(&byte, &char_count, &str, &info);
 			i = 0;
