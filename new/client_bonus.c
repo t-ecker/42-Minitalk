@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:29:02 by tomecker          #+#    #+#             */
-/*   Updated: 2024/05/02 15:06:32 by tecker           ###   ########.fr       */
+/*   Updated: 2024/05/02 17:11:25 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include <stdio.h>
-#include <unistd.h>
 
 void	handler_function(int sig)
 {
@@ -79,11 +77,10 @@ int	main(int argc, char *argv[])
 
 	if (argc != 3 || (ft_strlen(argv[1]) > 5 && ft_strlen(argv[1]) < 4))
 		return (write(1, "Error\n", 6), 1);
+	i = 0;
 	pid = ft_atoi(argv[1]);
 	len = ft_strlen(argv[2]);
-	printf("%i\n", len);
 	converter_int(len, pid);
-	i = 0;
 	b.sa_handler = handler_function;
 	sigemptyset(&b.sa_mask);
 	b.sa_flags = 0;

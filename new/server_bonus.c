@@ -3,43 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
-/*   Updated: 2024/05/02 15:05:11 by tecker           ###   ########.fr       */
+/*   Updated: 2024/05/02 17:10:21 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-#include <stdio.h>
-
-void	char_process(int *byte, int *char_count, char **str, siginfo_t **info)
+void	char_process(int *byte, int *char_count, siginfo_t **info)
 {
+	static char	*str = NULL;
+
 	if (*char_count == 0)
 	{
-		*str = malloc(*byte + 1);
-		if (*str == NULL)
-		{
-			write(1, "Memory allocation failed\n", 25);
-			exit(1);
-		}
-		(*str)[0] = '\0';
+		str = malloc(*byte + 1);
+		if (str == NULL)
+			return (write(1, "Memory allocation failed\n", 25), exit(1));
+		(str)[0] = '\0';
 		(*char_count)++;
 		*byte = 0;
 		return ;
 	}
 	if (*byte == 0)
 	{
-		write(1, *str, ft_strlen(*str));
+		(str)[(*char_count)++ - 1] = '\0';
+		write(1, str, ft_strlen(str));
 		write(1, "\n", 1);
 		kill((*info)->si_pid, SIGUSR1);
-		free(*str);
-		*str = NULL;
+		free(str);
+		str = NULL;
 		*char_count = 0;
 	}
 	else
-		(*str)[(*char_count)++ - 1] = *byte;
+		(str)[(*char_count)++ - 1] = *byte;
 	*byte = 0;
 }
 
@@ -48,37 +46,23 @@ void	converter(int signum, siginfo_t *info, void *context)
 	static int	byte = 0;
 	static int	i = 0;
 	static int	char_count = 0;
-	static char	*str = NULL;
-	int			n;
 
 	(void)context;
 	if (char_count == 0)
 	{
-		if (signum == SIGUSR1)
-			n = 1;
-		else
-			n = 0;
-		byte <<= 1;
-		byte |= n;
-		i++;
-		if (i > 31)
+		byte = (byte << 1) | (signum == SIGUSR1);
+		if (++i > 31)
 		{
-			char_process(&byte, &char_count, &str, &info);
+			char_process(&byte, &char_count, &info);
 			i = 0;
 		}
 	}
 	else
 	{
-		if (signum == SIGUSR1)
-			n = 1;
-		else
-			n = 0;
-		byte <<= 1;
-		byte |= n;
-		i++;
-		if (i == 8)
+		byte = (byte << 1) | (signum == SIGUSR1);
+		if (++i == 8)
 		{
-			char_process(&byte, &char_count, &str, &info);
+			char_process(&byte, &char_count, &info);
 			i = 0;
 		}
 	}
