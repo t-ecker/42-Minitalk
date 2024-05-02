@@ -3,65 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
-/*   Updated: 2024/04/26 15:46:47 by tecker           ###   ########.fr       */
+/*   Updated: 2024/05/02 17:10:21 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include <stdio.h>
 
-int	g_buffer_size = 512;
-
-void	my_realloc(char **ptr)
+void	char_process(int *byte, int *char_count, siginfo_t **info)
 {
-	char	*new_ptr;
-	// printf("\nb: %i\n\n", g_buffer_size);	
-	if (*ptr == NULL)
-	{
-		*ptr = malloc((g_buffer_size) * sizeof(char));
-		if (*ptr == NULL)
-		{
-			write(1, "Memory allocation failed\n", 25);
-			exit(1);
-		}
-		(*ptr)[0] = '\0';
-	}
-	else
-	{
-		new_ptr = malloc((g_buffer_size) * sizeof(char));
-		if (new_ptr == NULL)
-		{
-			write(1, "Memory allocation failed\n", 25);
-			free(*ptr);
-			exit(1);
-		}
-		ft_memcpy(new_ptr, *ptr, ft_strlen(*ptr));
-		free(*ptr);
-		*ptr = new_ptr;
-	}
-}
+	static char	*str = NULL;
 
-void	char_process(int *byte, int *char_count, char **str, siginfo_t **info)
-{
+	if (*char_count == 0)
+	{
+		str = malloc(*byte + 1);
+		if (str == NULL)
+			return (write(1, "Memory allocation failed\n", 25), exit(1));
+		(str)[0] = '\0';
+		(*char_count)++;
+		*byte = 0;
+		return ;
+	}
 	if (*byte == 0)
 	{
-		write(1, *str, ft_strlen(*str));
+		(str)[(*char_count)++ - 1] = '\0';
+		write(1, str, ft_strlen(str));
 		write(1, "\n", 1);
 		kill((*info)->si_pid, SIGUSR1);
-		free(*str);
-		*str = NULL;
-		g_buffer_size = 512;
-		// printf("\nc: %i\n\n", *char_count);
+		free(str);
+		str = NULL;
 		*char_count = 0;
 	}
 	else
-	{
-		if (*char_count < g_buffer_size)
-			(*str)[(*char_count)++] = *byte;
-	}
+		(str)[(*char_count)++ - 1] = *byte;
 	*byte = 0;
 }
 
@@ -70,27 +46,27 @@ void	converter(int signum, siginfo_t *info, void *context)
 	static int	byte = 0;
 	static int	i = 0;
 	static int	char_count = 0;
-	static char	*str = NULL;
-	int			n;
 
 	(void)context;
-	if (signum == SIGUSR1)
-		n = 1;
+	if (char_count == 0)
+	{
+		byte = (byte << 1) | (signum == SIGUSR1);
+		if (++i > 31)
+		{
+			char_process(&byte, &char_count, &info);
+			i = 0;
+		}
+	}
 	else
-		n = 0;
-	byte <<= 1;
-	byte |= n;
-	i++;
-	if (char_count == g_buffer_size || str == NULL)
 	{
-		g_buffer_size *= 2;
-		my_realloc(&str);
+		byte = (byte << 1) | (signum == SIGUSR1);
+		if (++i == 8)
+		{
+			char_process(&byte, &char_count, &info);
+			i = 0;
+		}
 	}
-	if (i == 8)
-	{
-		char_process(&byte, &char_count, &str, &info);
-		i = 0;
-	}
+	usleep(100);
 	kill(info->si_pid, SIGUSR2);
 }
 
