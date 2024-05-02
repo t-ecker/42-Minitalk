@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:29:02 by tomecker          #+#    #+#             */
-/*   Updated: 2024/05/02 17:11:25 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:34:12 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	handler_function(int sig)
 		write(1, "\nMessage sent successfully\n\n", 28);
 		exit(1);
 	}
-	if (sig == SIGUSR2)
-		usleep(10);
 }
 
 void	converter_int(int num, int pid)

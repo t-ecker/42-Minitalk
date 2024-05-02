@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
-/*   Updated: 2024/05/02 17:10:21 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:34:20 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	converter(int signum, siginfo_t *info, void *context)
 			i = 0;
 		}
 	}
-	usleep(100);
+	usleep(10);
 	kill(info->si_pid, SIGUSR2);
 }
 
