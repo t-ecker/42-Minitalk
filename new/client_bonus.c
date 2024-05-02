@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:29:02 by tomecker          #+#    #+#             */
-/*   Updated: 2024/04/29 18:14:25 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:06:32 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,30 +23,29 @@ void	handler_function(int sig)
 		exit(1);
 	}
 	if (sig == SIGUSR2)
-		usleep(100);
+		usleep(10);
 }
-void converter_int(int num, int pid)
+
+void	converter_int(int num, int pid)
 {
 	struct sigaction	sa;
+	int					i;
 
 	sa.sa_handler = handler_function;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGUSR2, &sa, NULL);
-	int i;
 	i = 31;
-    while (i >= 0)
+	while (i >= 0)
 	{
-        if (1 == ((num >> i) & 1))
-            kill(pid, SIGUSR1);
-        else
-            kill(pid, SIGUSR2);
+		if (1 == ((num >> i) & 1))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
 		pause();
 		i--;
-    }
+	}
 }
-
-
 
 void	converter(char c, int pid)
 {
@@ -76,13 +75,13 @@ int	main(int argc, char *argv[])
 	int					i;
 	int					pid;
 	struct sigaction	b;
-	int len;
+	int					len;
 
 	if (argc != 3 || (ft_strlen(argv[1]) > 5 && ft_strlen(argv[1]) < 4))
 		return (write(1, "Error\n", 6), 1);
 	pid = ft_atoi(argv[1]);
 	len = ft_strlen(argv[2]);
-	// printf("%i\n", len);
+	printf("%i\n", len);
 	converter_int(len, pid);
 	i = 0;
 	b.sa_handler = handler_function;
@@ -95,4 +94,3 @@ int	main(int argc, char *argv[])
 	pause();
 	return (0);
 }
-

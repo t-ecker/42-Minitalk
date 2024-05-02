@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
-/*   Updated: 2024/04/29 18:14:13 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:05:11 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	char_process(int *byte, int *char_count, char **str, siginfo_t **info)
 {
 	if (*char_count == 0)
 	{
-		// ft_putnbr_fd(*byte, 1);
-		// write(1, "\n", 1);
 		*str = malloc(*byte + 1);
 		if (*str == NULL)
 		{
@@ -41,7 +39,7 @@ void	char_process(int *byte, int *char_count, char **str, siginfo_t **info)
 		*char_count = 0;
 	}
 	else
-			(*str)[(*char_count)++ - 1] = *byte;
+		(*str)[(*char_count)++ - 1] = *byte;
 	*byte = 0;
 }
 
@@ -52,6 +50,7 @@ void	converter(int signum, siginfo_t *info, void *context)
 	static int	char_count = 0;
 	static char	*str = NULL;
 	int			n;
+
 	(void)context;
 	if (char_count == 0)
 	{
@@ -83,6 +82,7 @@ void	converter(int signum, siginfo_t *info, void *context)
 			i = 0;
 		}
 	}
+	usleep(100);
 	kill(info->si_pid, SIGUSR2);
 }
 
