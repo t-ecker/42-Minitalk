@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:32:10 by tomecker          #+#    #+#             */
-/*   Updated: 2024/05/03 09:44:24 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/05/29 19:03:47 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	char_process(int *byte, int *char_count, siginfo_t **info)
 	}
 	if (*byte == 0)
 	{
-		(str)[(*char_count)++ - 1] = '\0';
+		(str)[(*char_count) - 1] = '\0';
 		write(1, str, ft_strlen(str));
 		write(1, "\n", 1);
 		kill((*info)->si_pid, SIGUSR1);
