@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:29:02 by tomecker          #+#    #+#             */
-/*   Updated: 2024/05/03 09:54:17 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:44:37 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	handler_function(int sig)
 	{
 		usleep(42);
 		write(1, "\nMessage sent successfully\n\n", 28);
-		exit(1);
+		exit(0);
 	}
 	else if (sig == SIGUSR2)
 		usleep(42);

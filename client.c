@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:09:34 by tecker            #+#    #+#             */
-/*   Updated: 2024/05/03 09:46:55 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:46:02 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	handler_function(int sig)
 	if (sig == SIGUSR1)
 	{
 		usleep(42);
-		exit(1);
+		exit(0);
 	}
 	else if (sig == SIGUSR2)
 		usleep(42);
