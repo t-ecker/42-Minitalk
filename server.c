@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:38:43 by tecker            #+#    #+#             */
-/*   Updated: 2024/05/02 17:31:08 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:16:28 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	converter(int signum, siginfo_t *info, void *context)
 			i = 0;
 		}
 	}
-	usleep(10);
+	usleep(42);
 	kill(info->si_pid, SIGUSR2);
 }
 
