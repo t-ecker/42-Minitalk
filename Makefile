@@ -1,55 +1,77 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/04/23 19:00:52 by tomecker          #+#    #+#              #
-#    Updated: 2024/05/06 19:15:10 by tomecker         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 SERVER = server
 CLIENT = client
 CLIENT_BONUS = client_bonus
 SERVER_BONUS = server_bonus
+
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
+
 CFLAGS = -Wall -Werror -Wextra
 
+
+SRC =		./src/server.c \
+			./src/client.c
+
+SRC_BONUS =	./src/bonus/server_bonus.c \
+			./src/bonus/client_bonus.c
+
+OBJ_DIR = ./obj
+SRC_DIR = ./src
+
+OBJ_FILES		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+OBJ_FILES_BONUS	=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_BONUS))
+
 all: $(SERVER) $(CLIENT)
+	clear;
+	@$(MAKE) loading
+	clear;
 
-$(SERVER): server.o $(LIBFT)
-	@cc $(CFLAGS) server.o $(LIBFT) -o $(SERVER)
+$(SERVER): $(LIBFT) $(OBJ_FILES)
+	$(CC) $(CFLAGS) $< $(OBJ_DIR)/server.o -o $@
 
-$(CLIENT): client.o $(LIBFT)
-	@cc $(CFLAGS) client.o $(LIBFT) -o $(CLIENT)
+$(CLIENT): $(LIBFT) $(OBJ_FILES)
+	$(CC) $(CFLAGS) $< $(OBJ_DIR)/client.o -o $@
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(LIBFT):
+$(LIBFT):	$(LIBFT_DIR)/.git
 	@make -C $(LIBFT_DIR)
 
-bonus: $(SERVER_BONUS) $(CLIENT_BONUS)
+$(LIBFT_DIR)/.git:
+	@echo "\033[33mInitializing Libft submodule...\033[0m"
+	@git submodule update --init --recursive
+	@echo "\033[32mLibft submodule initialized.\033[0m"
 
-$(SERVER_BONUS): server_bonus.o $(LIBFT)
-	@cc $(CFLAGS) server_bonus.o $(LIBFT) -o $(SERVER_BONUS)
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
 
-$(CLIENT_BONUS): client_bonus.o $(LIBFT)
-	@cc $(CFLAGS) client_bonus.o $(LIBFT) -o $(CLIENT_BONUS)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+bonus:	$(SERVER_BONUS) $(CLIENT_BONUS)
+	clear;
+	@$(MAKE) loading
+	clear;
+
+$(SERVER_BONUS):	$(LIBFT) $(OBJ_FILES_BONUS) 
+	$(CC) $(CFLAGS) $< $(OBJ_DIR)/bonus/server_bonus.o -o $@
+
+$(CLIENT_BONUS):	$(LIBFT) $(OBJ_FILES_BONUS) 
+	$(CC) $(CFLAGS) $< $(OBJ_DIR)/bonus/client_bonus.o -o $@
 
 clean:
-	@rm -f *.o
+	@rm -rf $(OBJ_DIR)
 	@make clean -C $(LIBFT_DIR)
-	@echo "Cleaned successfully"
-	
+
 fclean: clean
-	@rm -f $(SERVER) $(CLIENT) $(CLIENT_BONUS) $(SERVER_BONUS) *.o
+	@rm -f $(SERVER) $(CLIENT) $(CLIENT_BONUS) $(SERVER_BONUS)
 	@make fclean -C $(LIBFT_DIR)
-	@echo "Fully cleaned"
 
-re: fclean all bonus
+re: fclean all
 
-.PHONY: all bonus clean fclean re
+loading:
+	@for i in {1..42}; do \
+		printf '%s' "█"; \
+		sleep 0.01; \
+	done
+
+.PHONY: all clean fclean re loading bonus
