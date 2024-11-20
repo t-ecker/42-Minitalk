@@ -33,7 +33,7 @@ $(CLIENT): $(LIBFT) $(OBJ_FILES)
 	$(CC) $(CFLAGS) $< $(OBJ_DIR)/client.o -o $@
 
 $(LIBFT):	$(LIBFT_DIR)/.git
-	@make -C $(LIBFT_DIR)
+	@make extra -C $(LIBFT_DIR)
 
 $(LIBFT_DIR)/.git:
 	@echo "\033[33mInitializing Libft submodule...\033[0m"
