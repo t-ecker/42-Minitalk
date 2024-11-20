@@ -7,6 +7,7 @@ LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 CFLAGS = -Wall -Werror -Wextra
+CC = cc
 
 
 SRC =		./src/server.c \
