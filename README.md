@@ -22,7 +22,7 @@
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/minitalk.git
+git clone https://github.com/t-ecker/42-Minitalk.git
 cd minitalk
 ```
 
