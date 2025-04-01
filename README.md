@@ -42,18 +42,10 @@ The server will start and wait for the client to send a message
 ### 4️⃣ Run the Client (in different terminal)
 
 ```bash
-./client <server_pid> "Hello, World!"
+./client <server_pid> "message"
 ```
 
 Where `<server_pid>` is the Process ID of the server (server printed it after starting)
-
-### 5️⃣ Test with Multiple Messages
-
-You can send different messages to the server, and it will decode and print each one
-
-```bash
-./client <server_pid> "This is a test message"
-```
 
 ## 🏁 Conclusion
 
