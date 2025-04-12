@@ -28,13 +28,13 @@ cd minitalk
 
 ### 2️⃣ Compile the Program
 ```bash
-make
+make bonus
 ```
-
+> **Note**: The "bonus" version provides the best experience
 ### 3️⃣ Run the Server
 
 ```bash
-./server
+./server_bonus
 ```
 
 The server will start and wait for the client to send a message
@@ -42,7 +42,7 @@ The server will start and wait for the client to send a message
 ### 4️⃣ Run the Client (in different terminal)
 
 ```bash
-./client <server_pid> "message"
+./client_bonus <server_pid> "message"
 ```
 
 Where `<server_pid>` is the Process ID of the server (server printed it after starting)
